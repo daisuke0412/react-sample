@@ -1,4 +1,3 @@
-
 import type { Item, CreateItemParams } from "~/features/items/types";
 
 // ※ 実アプリでは DB に格納されている想定
@@ -8,7 +7,8 @@ let items: Item[] = [
     name: "サンプル商品A",
     price: 1000,
     status: "on_sale",
-    description: "使いやすさを追求した定番のアイテムです。オフィスや家庭で大活躍します。",
+    description:
+      "使いやすさを追求した定番のアイテムです。オフィスや家庭で大活躍します。",
   },
   {
     id: "item-002",
@@ -29,7 +29,8 @@ let items: Item[] = [
     name: "サンプル商品D",
     price: 3200,
     status: "on_sale",
-    description: "最新の機能を搭載したハイエンドモデル。プロフェッショナルな現場にも対応。",
+    description:
+      "最新の機能を搭載したハイエンドモデル。プロフェッショナルな現場にも対応。",
   },
   {
     id: "item-005",
@@ -42,11 +43,12 @@ let items: Item[] = [
 
 // ===== 一覧取得（clientLoader で利用） =====
 export async function getItems(): Promise<Item[]> {
+  // throw new Error("データの取得に失敗しました (500 Internal Server Error)");
+  
   // 通信遅延の疑似再現
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return items;
 }
-
 
 // ===== 新規商品登録（clientAction で利用） =====
 export async function createItem(params: CreateItemParams): Promise<Item> {
