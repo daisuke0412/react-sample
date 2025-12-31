@@ -5,3 +5,9 @@ export interface Item {
   status: "on_sale" | "sold_out";
   description: string;
 }
+
+export interface CreateItemParams {
+  name: string;
+  price: number;
+  description?: string;
+}

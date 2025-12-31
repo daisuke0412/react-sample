@@ -1,5 +1,5 @@
 
-import type { Item } from "~/features/items/types";
+import type { Item, CreateItemParams } from "~/features/items/types";
 
 // ※ 実アプリでは DB に格納されている想定
 let items: Item[] = [
@@ -45,4 +45,25 @@ export async function getItems(): Promise<Item[]> {
   // 通信遅延の疑似再現
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return items;
+}
+
+
+// ===== 新規商品登録（clientAction で利用） =====
+export async function createItem(params: CreateItemParams): Promise<Item> {
+  // throw new Error("データの登録に失敗しました (500 Internal Server Error)");
+
+  // 通信遅延の疑似再現
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const newItem: Item = {
+    id: `item-${Date.now()}`,
+    name: params.name,
+    price: params.price,
+    status: "on_sale",
+    description: params.description ?? "新規登録商品",
+  };
+
+  items = [...items, newItem];
+
+  return newItem;
 }
