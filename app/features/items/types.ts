@@ -11,3 +11,8 @@ export interface CreateItemParams {
   price: number;
   description?: string;
 }
+
+export interface ActionResult {
+  success: boolean;
+  message?: string;
+}

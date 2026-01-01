@@ -11,6 +11,9 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { theme } from "./settings/mui/theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { SampleLayout } from "./components/Layout/SampleLayout";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,22 +47,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
-}
-
-export function ErrorBoundary() {
-  // 発生したエラーを取得
-  const error = useRouteError();
-
   return (
-    <div className="error-box">
-      <h2>システムエラーが発生しました</h2>
-      
-      {/* 発生したエラーを表示 */}
-      <p>{error instanceof Error ? error.message : "予期せぬエラーです"}</p>
-      <Link to="/"  style={{ color: "blue", textDecoration: "underline" }}>
-        トップへ戻る
-      </Link>
-    </div>
+    <ThemeProvider theme={theme}>
+      {/* CSSリセットと基本スタイルの適用 */}
+      <CssBaseline />
+      <SampleLayout>
+        <Outlet />
+      </SampleLayout>
+    </ThemeProvider>
   );
 }
+
+export { AppErrorBoundary as ErrorBoundary } from "./components/elements/AppErrorBoundary";

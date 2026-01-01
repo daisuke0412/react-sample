@@ -1,3 +1,9 @@
-export default function ItemDetailPage() {
-  return <h1>ItemDetailPage</h1>
+import { useItemDetailRouteHandlers } from "~/features/items/hooks/useItemDetailRoute";
+import { ItemDetailPage } from "~/features/items/pages/ItemDetailPage";
+
+export const clientLoader = useItemDetailRouteHandlers.clientLoader;
+export const clientAction = useItemDetailRouteHandlers.clientAction;
+
+export default function ItemDetailPageRoute() {
+  return <ItemDetailPage />;
 }
