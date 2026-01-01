@@ -3,9 +3,9 @@ import { getItemsQueryOptions } from "../api";
 
 export const useItemsRouteHandlers = {
   clientLoader: async () => {
-    // 画面初期表示時点のクエリキー（name=""）と同じクエリキーでensureQueryDataを実行する
-    // これにより、初期表示時のデータ取得を待機できる
-    await queryClient.ensureQueryData(
+    // fetchQuery はデータが stale (古い) 場合やキャッシュがない場合に再取得を行う
+    // invalidateQueries でデータが stale になっている場合、ここで確実に再取得が走る
+    await queryClient.fetchQuery(
       getItemsQueryOptions("")
     );
     

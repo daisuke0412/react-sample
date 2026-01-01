@@ -32,3 +32,10 @@ export const getItemsQueryOptions = (name?: string) => {
     queryFn: () => getItems(name),
   });
 };
+
+export const getItemQueryOptions = (id: string) => {
+  return queryOptions({
+    queryKey: itemKeys.detail(id),
+    queryFn: () => getItem(id),
+  });
+};

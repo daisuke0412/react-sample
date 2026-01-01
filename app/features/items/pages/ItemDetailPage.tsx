@@ -1,9 +1,23 @@
 import { Paper, Box, Typography, Chip, TextField, Button } from "@mui/material";
-import { Form, Link } from "react-router";
+import { Link } from "react-router";
 import { useItemDetail } from "../hooks/useItemDetail";
 
 export function ItemDetailPage() {
-  const { item, isEditing, isSubmitting, handleEditStart, handleEditCancel, errorMessage } = useItemDetail();
+  const { item, isEditing, isSubmitting, handleEditStart, handleEditCancel, mutateAsync, errorMessage } = useItemDetail();
+
+  if (!item) {
+    return <Typography>読み込み中...</Typography>;
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    mutateAsync({
+      name: formData.get("name") as string,
+      price: Number(formData.get("price")),
+      description: formData.get("description") as string,
+    });
+  };
 
   return (
     <Paper sx={{ p: 4, maxWidth: 600, mx: "auto", mt: 4 }}>
@@ -18,7 +32,7 @@ export function ItemDetailPage() {
 
       {isEditing ? (
         // 編集モード: フォームを表示
-        <Form method="post" noValidate>
+        <form onSubmit={handleSubmit} noValidate>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <TextField
               name="name"
@@ -43,10 +57,10 @@ export function ItemDetailPage() {
             />
             <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
               <Button onClick={handleEditCancel}>キャンセル</Button>
-              <Button type="submit" variant="contained">保存</Button>
+              <Button type="submit" variant="contained" disabled={isSubmitting}>保存</Button>
             </Box>
           </Box>
-        </Form>
+        </form>
       ) : (
         // 閲覧モード: テキストを表示
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
