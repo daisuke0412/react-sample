@@ -5,7 +5,9 @@
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
+    "dev:app": "react-router dev",
+    "dev:mock": "cd mock_server && pnpm start",
+    "start": "concurrently -c \"bgBlue.bold,bgMagenta.bold\" \"pnpm dev:app\" \"pnpm dev:mock\"",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
@@ -27,6 +29,7 @@
     "@types/node": "^22",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "concurrently": "^9.2.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
