@@ -1,18 +1,33 @@
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import type { useItemsRouteHandlers } from "./useItemsRoute";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { getItemsQueryOptions } from "../api";
 
 export function useItems() {
   // clientLoaderの戻り値を型安全に取得
   const items = useLoaderData<typeof useItemsRouteHandlers.clientLoader>();
   const navigate = useNavigate();
   const revalidator = useRevalidator();
+  const [searchName, setSearchName] = useState("");
+
+  // useQuery 実行
+  // 戻り値として、データ(data)や状態(status)を含む実行結果オブジェクトが返される
+  const result = useQuery(getItemsQueryOptions(searchName));
+
+  // 実行結果オブジェクトから必要なデータを取り出す
+  const { data } = result;
 
   const handleRefresh = () => {
     revalidator.revalidate();
   };
 
-    const handleItemClick = (id: string) => () => {
+  const handleItemClick = (id: string) => () => {
     navigate(`/items/${id}`);
+  };
+
+  const handleSearch = (name: string) => {
+    setSearchName(name);
   };
 
   return {
@@ -20,8 +35,11 @@ export function useItems() {
       onRefresh: handleRefresh,
     },
     listProps: {
-      items: items || [],
+      items: data || [],
       onItemClick: handleItemClick,
+    },
+    searchProps: {
+      onSearch: handleSearch,
     },
   };
 }

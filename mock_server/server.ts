@@ -56,9 +56,19 @@ let items: Item[] = [
 app.get('/items', (req: Request, res: Response) => {
   // テスト用エラーコード
   // res.status(500).json();
+
+  console.log('GET /items', req.query);
+  const name = req.query.name as string | undefined;
   
-  console.log('GET /items');
-  res.json(items);
+  let result = items;
+  if (name) {
+    result = result.filter(item => item.name.includes(name));
+  }
+  
+  // 5秒遅延させてレスポンスを返す
+  setTimeout(() => {
+    res.json(result);
+  }, 1000);
 });
 
 // GET /items/:id
