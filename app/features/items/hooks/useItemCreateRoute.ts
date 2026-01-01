@@ -1,5 +1,6 @@
 import { redirect, type ClientActionFunctionArgs } from "react-router";
-import { createItem } from "../mock-api";
+import { createItem } from "../api";
+import { isAxiosError } from "axios";
 
 export const useItemCreateRouteHandlers = {
   // ClientActionFunctionArgsは React Router の clientAction に渡される引数の型
@@ -17,11 +18,19 @@ export const useItemCreateRouteHandlers = {
       });
 
       return redirect("/items");
-    } catch (e) {
-      return {
-        success: false,
-        message: "登録に失敗しました",
-      };
+    } catch (error) {
+      // 400 Bad Request の場合 (入力値不備など)
+      // サーバーからのエラーメッセージを表示して、ユーザーに修正を促す
+      if (isAxiosError(error) && error.response?.status === 400) {
+        return {
+          success: false,
+          message: "登録に失敗しました",
+        };
+      } else {
+        // その他のエラー (500エラーやネットワークエラーなど)
+        // ここでは処理せず再スローし、上位の ErrorBoundary でキャッチさせる
+        throw error;
+      }
     }
   },
 };

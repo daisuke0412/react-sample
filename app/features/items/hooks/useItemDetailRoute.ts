@@ -1,5 +1,5 @@
 import type { ClientLoaderFunctionArgs, ClientActionFunctionArgs } from "react-router";
-import { getItem, updateItem } from "../mock-api";
+import { getItem, updateItem } from "../api";
 
 export const useItemDetailRouteHandlers = {
   // データ取得

@@ -21,6 +21,13 @@ interface Item {
   description: string;
 }
 
+// 商品作成用パラメータの型定義
+interface CreateItemParams {
+  name: string;
+  price: number;
+  description?: string;
+}
+
 // インメモリデータストア
 let items: Item[] = [
   { id: "1", name: "高級腕時計", price: 150000, status: "on_sale", description: "洗練されたデザインの高級腕時計です。" },
@@ -47,6 +54,9 @@ let items: Item[] = [
 
 // GET /items
 app.get('/items', (req: Request, res: Response) => {
+  // テスト用エラーコード
+  // res.status(500).json();
+  
   console.log('GET /items');
   res.json(items);
 });
@@ -65,11 +75,17 @@ app.get('/items/:id', (req: Request, res: Response) => {
 
 // POST /items
 app.post('/items', (req: Request, res: Response) => {
-  console.log('POST /items', req.body);
+  // テスト用エラーコード
+  // res.status(500).json();
+
+  const body = req.body as CreateItemParams;
+  console.log('POST /items', body);
 
   const newItem: Item = {
     id: String(Date.now()),
-    ...req.body,
+    ...body,
+    status: "on_sale",
+    description: body.description || "",
   };
   items.push(newItem);
   res.status(201).json(newItem);
