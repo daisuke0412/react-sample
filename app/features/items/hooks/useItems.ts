@@ -3,7 +3,7 @@ import type { useItemsRouteHandlers } from "./useItemsRoute";
 
 export function useItems() {
   // clientLoaderの戻り値を型安全に取得
-  const { items } = useLoaderData<typeof useItemsRouteHandlers.clientLoader>();
+  const items = useLoaderData<typeof useItemsRouteHandlers.clientLoader>();
   const navigate = useNavigate();
   const revalidator = useRevalidator();
 

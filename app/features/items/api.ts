@@ -3,6 +3,5 @@ import type { Item } from "./types";
 
 export const getItems = async () => {
   // GET /items へのリクエスト
-  const response = await api.get<Item[]>("/items");
-  return response.data;
+  return await api.get<Item[]>("/items");
 };
