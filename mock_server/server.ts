@@ -132,13 +132,17 @@ app.post('/login', (req, res) => {
     userName: "テストユーザー",
     roles: "admin",
   };
-  res.json(user);
+  setTimeout(() => {
+    res.json(user);
+  }, 2000);
 });
 
 // POST /logout
 app.post('/logout', (req, res) => {
   console.log('POST /logout');
-  res.status(200).json({ message: 'ログアウトしました' });
+  setTimeout(() => {
+    res.status(200).json({ message: 'ログアウトしました' });
+  }, 2000);
 });
 
 // サーバーを起動し、指定されたポートでリクエストを待機する

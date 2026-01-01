@@ -1,6 +1,9 @@
 import Axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
+import { useLoadingStore } from "~/stores/loading-store";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
+const getLoadingStore = () => useLoadingStore.getState();
 
 // Axiosのメソッドがデータを直接返すように型定義を拡張
 export interface ApiClient extends AxiosInstance {
@@ -19,7 +22,10 @@ export const api = Axios.create({
   },
 }) as ApiClient;
 
-const authRequestInterceptor = (config: any) => {
+const requestInterceptor = (config: any) => {
+  // ローディング開始
+  getLoadingStore().startLoading();
+
   // ログ出力
   console.log(`[Request] ${config.method?.toUpperCase()} ${config.url}`);
 
@@ -32,9 +38,21 @@ const authRequestInterceptor = (config: any) => {
 };
 
 const responseSuccessInterceptor = (response: any) => {
-    // レスポンス全体ではなく、dataプロパティの中身だけを返す
-    return response.data;
+  // ローディング終了
+  getLoadingStore().endLoading();
+  return response.data;
 };
 
-api.interceptors.request.use(authRequestInterceptor);
-api.interceptors.response.use(responseSuccessInterceptor);
+const responseErrorInterceptor = (error: any) => {
+  // ローディング終了
+  getLoadingStore().endLoading();
+  return Promise.reject(error);
+};
+
+// Interceptorの登録
+api.interceptors.request.use(requestInterceptor, (error) => {
+  // リクエスト設定時にエラーが発生した場合（送信前）、ローディングを終了させる
+  getLoadingStore().endLoading();
+  return Promise.reject(error);
+});
+api.interceptors.response.use(responseSuccessInterceptor, responseErrorInterceptor);

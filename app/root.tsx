@@ -13,6 +13,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { SampleLayout } from "./components/Layout/SampleLayout";
 import { queryClient } from "./lib/query-client";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { LoadingSpinner } from "./components/elements/LoadingSpinner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -53,6 +54,7 @@ export default function App() {
         <SampleLayout>
           <Outlet />
         </SampleLayout>
+        <LoadingSpinner />
       </QueryClientProvider>
     </ThemeProvider>
   );
