@@ -122,6 +122,25 @@ app.delete('/items/:id', (req: Request, res: Response) => {
   res.status(204).send();
 });
 
+// POST /login
+app.post('/login', (req, res) => {
+  console.log('POST /login', req.body);
+  const { userId, password } = req.body;
+  
+  const user = {
+    userId: userId,
+    userName: "テストユーザー",
+    roles: "admin",
+  };
+  res.json(user);
+});
+
+// POST /logout
+app.post('/logout', (req, res) => {
+  console.log('POST /logout');
+  res.status(200).json({ message: 'ログアウトしました' });
+});
+
 // サーバーを起動し、指定されたポートでリクエストを待機する
 app.listen(PORT, () => {
   console.log(`Mock server running on http://localhost:${PORT}`);
