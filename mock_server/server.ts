@@ -25,7 +25,24 @@ interface Item {
 let items: Item[] = [
   { id: "1", name: "高級腕時計", price: 150000, status: "on_sale", description: "洗練されたデザインの高級腕時計です。" },
   { id: "2", name: "ワイヤレスイヤホン", price: 12000, status: "on_sale", description: "高音質でノイズキャンセリング機能付き。" },
-  // items...
+  { id: "3", name: "高級腕時計 シルバーモデル", price: 160000, status: "on_sale", description: "クールなシルバーカラーの高級腕時計。" },
+  { id: "4", name: "高級腕時計 ゴールドエディション", price: 250000, status: "sold_out", description: "豪華なゴールド仕様の限定モデル。" },
+  { id: "5", name: "カジュアル腕時計", price: 5000, status: "on_sale", description: "普段使いに最適なカジュアルウォッチ。" },
+  { id: "6", name: "ワイヤレスイヤホン Pro", price: 25000, status: "on_sale", description: "プロ仕様の音質を追求したハイエンドモデル。" },
+  { id: "7", name: "ワイヤレスイヤホン Mini", price: 8000, status: "on_sale", description: "軽量コンパクトで持ち運びに便利。" },
+  { id: "8", name: "スポーツ用ワイヤレスイヤホン", price: 15000, status: "on_sale", description: "防水機能付きで運動中も安心。" },
+  { id: "9", name: "スマートフォン X", price: 98000, status: "on_sale", description: "最新機能を搭載したスタンダードモデル。" },
+  { id: "10", name: "スマートフォン Pro", price: 128000, status: "sold_out", description: "大画面と高性能カメラを搭載したプロモデル。" },
+  { id: "11", name: "スマートフォン ケース", price: 3000, status: "on_sale", description: "衝撃から守る耐久性の高いケース。" },
+  { id: "12", name: "ゲーミングPC", price: 200000, status: "on_sale", description: "最新ゲームも快適に動作するハイスペックPC。" },
+  { id: "13", name: "ゲーミングマウス", price: 8000, status: "on_sale", description: "精密な操作が可能な軽量マウス。" },
+  { id: "14", name: "ゲーミングキーボード", price: 15000, status: "on_sale", description: "光るバックライト付きメカニカルキーボード。" },
+  { id: "15", name: "オフィスチェア", price: 25000, status: "on_sale", description: "長時間のデスクワークでも疲れにくい設計。" },
+  { id: "16", name: "ゲーミングチェア", price: 35000, status: "sold_out", description: "リクライニング機能付きで快適な座り心地。" },
+  { id: "17", name: "コーヒーメーカー", price: 12000, status: "on_sale", description: "毎朝のコーヒーを美味しく淹れられます。" },
+  { id: "18", name: "全自動コーヒーメーカー", price: 30000, status: "on_sale", description: "豆から挽ける全自動タイプ。" },
+  { id: "19", name: "電気ケトル", price: 5000, status: "on_sale", description: "すぐにお湯が沸く便利なケトル。" },
+  { id: "20", name: "オーブントースター", price: 8000, status: "on_sale", description: "パンが美味しく焼ける高機能トースター。" },
 ];
 
 // GET /items

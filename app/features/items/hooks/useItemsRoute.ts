@@ -1,4 +1,4 @@
-import { getItems } from "../mock-api";
+import { getItems } from "../api";
 
 export const useItemsRouteHandlers = {
   clientLoader: async () => {
