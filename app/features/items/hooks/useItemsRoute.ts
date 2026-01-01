@@ -1,7 +1,14 @@
-import { getItems } from "../api";
+import { queryClient } from "~/lib/query-client";
+import { getItemsQueryOptions } from "../api";
 
 export const useItemsRouteHandlers = {
   clientLoader: async () => {
-    return await getItems();
+    // 画面初期表示時点のクエリキー（name=""）と同じクエリキーでensureQueryDataを実行する
+    // これにより、初期表示時のデータ取得を待機できる
+    await queryClient.ensureQueryData(
+      getItemsQueryOptions("")
+    );
+    
+    return null;
   },
 };

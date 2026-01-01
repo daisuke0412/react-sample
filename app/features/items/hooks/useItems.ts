@@ -1,12 +1,10 @@
-import { useLoaderData, useNavigate, useRevalidator } from "react-router";
-import type { useItemsRouteHandlers } from "./useItemsRoute";
+import { useNavigate, useRevalidator } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { getItemsQueryOptions } from "../api";
 
 export function useItems() {
   // clientLoaderの戻り値を型安全に取得
-  const items = useLoaderData<typeof useItemsRouteHandlers.clientLoader>();
   const navigate = useNavigate();
   const revalidator = useRevalidator();
   const [searchName, setSearchName] = useState("");
