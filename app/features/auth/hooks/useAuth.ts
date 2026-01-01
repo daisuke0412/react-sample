@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useUserStore } from "../../../stores/user-store";
 import { login as loginApi, logout as logoutApi } from "../api";
+import type { LoginInput } from "../schema";
 
 export interface UseAuthState {
   isSubmitting: boolean;
-  onLogin: (e: React.FormEvent<HTMLFormElement>) => void;
+  onLogin: (data: LoginInput) => void;
   error: string | null;
   onLogout: () => void;
 }
@@ -46,14 +47,9 @@ export function useAuth(onClose?: () => void): UseAuthState {
     },
   });
 
-  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onLogin = (data: LoginInput) => {
     setError(null);
-    const formData = new FormData(e.currentTarget);
-    const userId = formData.get("userId") as string;
-    const password = formData.get("password") as string;
-
-    loginMutation.mutate({ userId, password });
+    loginMutation.mutate(data);
   };
 
   return {

@@ -1,21 +1,28 @@
 import { useItemCreate } from "../hooks/useItemCreate";
 import { Box, Button, TextField, Alert, Paper, Typography } from "@mui/material";
-import type { CreateItemParams } from "../types";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { itemSchema, type ItemInput } from "../schema";
 
 export function ItemCreatePage() {
   const { mutateAsync, isSubmitting, errorMessage } = useItemCreate();
   
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    
-    const newItem: CreateItemParams = {
-      name: formData.get("name") as string,
-      price: Number(formData.get("price")),
-      description: formData.get("description") as string,
-    };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ItemInput>({
+    resolver: zodResolver(itemSchema),
+    defaultValues: {
+      name: "",
+      price: 0,
+      description: "",
+    },
+  });
 
-    await mutateAsync(newItem);
+
+  const onSubmit = async (data: ItemInput) => {
+    await mutateAsync(data);
   };
 
   return (
@@ -31,29 +38,35 @@ export function ItemCreatePage() {
         </Alert>
       )}
 
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         <TextField
-          name="name"
           label="商品名"
           required
           fullWidth
           disabled={isSubmitting}
+          error={!!errors.name}
+          helperText={errors.name?.message}
+          {...register("name")}
         />
         <TextField
-          name="price"
           label="価格"
           type="number"
           required
           fullWidth
           disabled={isSubmitting}
+          error={!!errors.price}
+          helperText={errors.price?.message}
+          {...register("price", { valueAsNumber: true })}
         />
         <TextField
-          name="description"
           label="商品説明"
           multiline
           rows={4}
           fullWidth
           disabled={isSubmitting}
+          error={!!errors.description}
+          helperText={errors.description?.message}
+          {...register("description")}
         />
         
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>

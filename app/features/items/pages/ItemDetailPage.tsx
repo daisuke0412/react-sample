@@ -1,22 +1,45 @@
 import { Paper, Box, Typography, Chip, TextField, Button } from "@mui/material";
 import { Link } from "react-router";
 import { useItemDetail } from "../hooks/useItemDetail";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { itemSchema, type ItemInput } from "../schema";
+import { useEffect } from "react";
 
 export function ItemDetailPage() {
   const { item, isEditing, isSubmitting, handleEditStart, handleEditCancel, mutateAsync, errorMessage } = useItemDetail();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ItemInput>({
+    resolver: zodResolver(itemSchema),
+    defaultValues: {
+      name: "",
+      price: 0,
+      description: "",
+    },
+  });
+
+  // 編集モード開始時やアイテムデータ変更時にフォームの初期値を設定
+  useEffect(() => {
+    if (item) {
+      reset({
+        name: item.name,
+        price: item.price,
+        description: item.description,
+      });
+    }
+  }, [item, isEditing, reset]);
 
   if (!item) {
     return <Typography>読み込み中...</Typography>;
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    mutateAsync({
-      name: formData.get("name") as string,
-      price: Number(formData.get("price")),
-      description: formData.get("description") as string,
-    });
+  const onSubmit = async (data: ItemInput) => {
+    await mutateAsync(data);
   };
 
   return (
@@ -32,35 +55,41 @@ export function ItemDetailPage() {
 
       {isEditing ? (
         // 編集モード: フォームを表示
-        <form onSubmit={handleSubmit} noValidate>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <TextField
-              name="name"
-              label="商品名"
-              defaultValue={item.name}
-              disabled={isSubmitting}
-            />
-            <TextField
-              name="price"
-              label="価格"
-              type="number"
-              defaultValue={item.price}
-              disabled={isSubmitting}
-            />
-            <TextField
-              name="description"
-              label="説明"
-              multiline
-              rows={4}
-              defaultValue={item.description}
-              disabled={isSubmitting}
-            />
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button onClick={handleEditCancel}>キャンセル</Button>
-              <Button type="submit" variant="contained" disabled={isSubmitting}>保存</Button>
-            </Box>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <TextField
+            label="商品名"
+            required
+            fullWidth
+            disabled={isSubmitting}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            {...register("name")}
+          />
+          <TextField
+            label="価格"
+            type="number"
+            required
+            fullWidth
+            disabled={isSubmitting}
+            error={!!errors.price}
+            helperText={errors.price?.message}
+            {...register("price")}
+          />
+          <TextField
+            label="説明"
+            multiline
+            rows={4}
+            fullWidth
+            disabled={isSubmitting}
+            error={!!errors.description}
+            helperText={errors.description?.message}
+            {...register("description")}
+          />
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button onClick={handleEditCancel} disabled={isSubmitting}>キャンセル</Button>
+            <Button type="submit" variant="contained" disabled={isSubmitting}>保存</Button>
           </Box>
-        </form>
+        </Box>
       ) : (
         // 閲覧モード: テキストを表示
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
