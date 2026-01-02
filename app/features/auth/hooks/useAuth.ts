@@ -21,13 +21,14 @@ export function useAuth(onClose?: () => void): UseAuthState {
   
   // ストアからアクションを取得
   // 注: オブジェクトとしてまとめて取得すると再レンダリングの原因になるため、個別に取得します
-  const login = useUserStore((state) => state.login);
-  const logout = useUserStore((state) => state.logout);
+  const setUser = useUserStore((state) => state.setUser);
+  const clearUser = useUserStore((state) => state.clearUser);
 
   const loginMutation = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      login(data); // ストア更新
+      // ログイン成功時にモックサーバから返却されるdata: LoginUserを、user-storeのsetUser関数を用いてuserに設定する
+      setUser(data);
       onClose?.();
       setError(null);
     },
@@ -40,7 +41,8 @@ export function useAuth(onClose?: () => void): UseAuthState {
   const logoutMutation = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
-      logout(); // ストア更新
+      // ログアウト成功時に、user-storeのclearUser関数を用いてuserをクリアする
+      clearUser();
     },
     onError: (err) => {
       console.error("Logout failed", err);
